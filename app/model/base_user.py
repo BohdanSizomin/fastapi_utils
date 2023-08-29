@@ -2,9 +2,9 @@ from datetime import datetime
 from typing import Self
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, func, or_
+from sqlalchemy.orm import Session
 
 from app.hash_utils import make_hash, hash_verify
-from app.database import SessionLocal
 from app.utils import generate_uuid
 
 
@@ -30,7 +30,7 @@ class BaseUser:
         self.password_hash = make_hash(value)
 
     @classmethod
-    def authenticate(cls, db: SessionLocal, user_id: str, password: str) -> Self:
+    def authenticate(cls, db: Session, user_id: str, password: str) -> Self:
         user = (
             db.query(cls)
             .filter(

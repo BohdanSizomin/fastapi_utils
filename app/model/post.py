@@ -2,11 +2,11 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from app.database import Base
+from app.database import db
 from app.utils import generate_uuid
 
 
-class Post(Base):
+class Post(db.Model):
     __tablename__ = "posts"
 
     id = Column(Integer, primary_key=True)

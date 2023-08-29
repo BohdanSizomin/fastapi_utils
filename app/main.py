@@ -8,24 +8,16 @@ jinja2.contextfunction = jinja2.pass_context
 from fastapi import FastAPI
 from sqladmin import Admin
 
-from app.database import get_engine
+from app.database import db
 from app.router import router
-from app import admin
-from app.database import engine
-from app.admin import authentication_backend
 
-engine = get_engine()
+from app.database import db
+
+
+engine = db.get_engine()
 
 app = FastAPI()
 
-admin = Admin(
-    app=app,
-    authentication_backend=authentication_backend,
-    engine=engine,
-    templates_dir="app/templates/admin",
-)
-
-sql_admin = Admin(app, engine)
 
 app.include_router(router)
 

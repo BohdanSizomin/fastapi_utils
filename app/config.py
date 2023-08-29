@@ -3,18 +3,16 @@ from pydantic import BaseSettings, EmailStr
 
 
 class Settings(BaseSettings):
-    SAMPLE_ENV_VAR: str = "<None>"
-    JWT_SECRET: str = "<None>"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    DB_URI: str = ""
-    DATABASE_URI: str = ""
-    DEV_DATABASE_URI: str = ""
+    JWT_SECRET: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    DATABASE_URI: str
     ADMIN_USER: str = "admin"
     ADMIN_PASS: str = "admin"
     ADMIN_EMAIL: EmailStr = "admin@admin.com"
+    DEFAULT_PAGE_SIZE: int = 10
 
     class Config:
-        env_file = ".env", "project.env"
+        env_file = "project.env", ".env"
 
 
 @lru_cache
