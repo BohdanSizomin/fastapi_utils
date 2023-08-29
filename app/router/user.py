@@ -6,7 +6,12 @@ import app.schema as s
 from app.dependency import get_current_user
 from app.database import get_db
 
-user_router = APIRouter(prefix="/user", tags=["Users"])
+user_router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@user_router.get("", response_model=list[s.User])
+def get_users(db: Session = Depends(get_db)):
+    return db.query(m.User).all()
 
 
 @user_router.post("/", status_code=201, response_model=s.User)

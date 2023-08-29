@@ -9,10 +9,18 @@ from app.database import get_db
 from app.dependency import get_current_user, get_current_post
 
 
-post_router = APIRouter(prefix="/post", tags=["Posts"])
+post_router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
-@post_router.post("/", status_code=status.HTTP_201_CREATED, response_model=s.Post)
+@post_router.get("", response_model=s.PostList)
+def get_posts(
+    db: Session = Depends(get_db),
+):
+    posts = db.query(m.Post).all()
+    return s.PostList(posts=posts)
+
+
+@post_router.post("", status_code=status.HTTP_201_CREATED, response_model=s.Post)
 def create_posts(
     post: s.BasePost,
     db: Session = Depends(get_db),
@@ -31,14 +39,6 @@ def create_posts(
         log(log.INFO, "Error creating a new post - %s", e)
     log(log.INFO, "Post created successfully")
     return new_post
-
-
-@post_router.get("/posts", response_model=s.PostList)
-def get_posts(
-    db: Session = Depends(get_db),
-):
-    posts = db.query(m.Post).all()
-    return s.PostList(posts=posts)
 
 
 @post_router.get("/{post_uuid}", response_model=s.Post)
