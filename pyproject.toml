@@ -29,6 +29,7 @@ fastapi-mail = "^1.2.7"
 itsdangerous = "^2.1.2"
 alchemical = "^0.7.1"
 fastapi-filter = "^0.6.1"
+faker = "^19.3.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"

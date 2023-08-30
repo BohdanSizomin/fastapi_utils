@@ -1,10 +1,15 @@
 from sqlalchemy.orm import Session
+from faker import Faker
 from invoke import task
-from app.config import Settings, get_settings
-from app.model import User
 
-NUM_TEST_USERS = 10
-NUM_TEST_POSTS = 3
+from app.config import Settings, get_settings
+import app.models as m
+
+fake = Faker()
+
+
+NUM_TEST_USERS = 1000
+NUM_TEST_POSTS = 1000
 
 
 settings: Settings = get_settings()
@@ -12,18 +17,16 @@ settings: Settings = get_settings()
 
 @task
 def fill_test_data(db: Session):
-    from app.model import Post
-
-    for uid in range(NUM_TEST_USERS):
-        user = User(username=f"User{uid}", password="pa$$", email=f"user{uid}@test.com")
+    # generate random users
+    for _ in range(NUM_TEST_USERS):
+        user = m.User(
+            username=fake.unique.user_name(),
+            email=fake.unique.email(),
+            password=fake.password(),
+        )
         db.add(user)
         db.commit()
         db.refresh(user)
-        for pid in range(NUM_TEST_POSTS):
-            db.add(
-                Post(
-                    title=f"Title{pid}",
-                    content=(f"Test of post {pid}" * (pid + 1)),
-                    user=user,
-                )
-            )
+
+
+# generate random posts
